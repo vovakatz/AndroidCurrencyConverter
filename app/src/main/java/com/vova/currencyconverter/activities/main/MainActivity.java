@@ -3,17 +3,29 @@ package com.vova.currencyconverter.activities.main;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.vova.currencyconverter.R;
+import com.vova.currencyconverter.net.RateService;
 
-public class MainActivity extends AppCompatActivity implements IMainView, View.OnClickListener
+public class MainActivity extends AppCompatActivity implements IMainView
 {
-    private EditText txtError;
+    private TextView txtError;
     private EditText txtAmount;
+    private TextView txtResults;
+    private RelativeLayout layoutOverlay;
+    private RelativeLayout layoutMain;
+    private TextView txtOverlayText;
+    private ProgressBar prgLoad;
+    private Button btnRefresh;
     private IMainPresenter presenter;
 
     @Override
@@ -24,15 +36,32 @@ public class MainActivity extends AppCompatActivity implements IMainView, View.O
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        presenter = new MainPresenter(this);
-        txtError = (EditText) findViewById(R.id.txtError);
+        presenter = new MainPresenter(this, new RateService());
+        txtError = (TextView) findViewById(R.id.txtError);
         txtAmount = (EditText) findViewById(R.id.txtAmount);
-        findViewById(R.id.btnConvert).setOnClickListener(this);
+        txtResults = (TextView)findViewById(R.id.txtResults);
+        layoutOverlay = (RelativeLayout)findViewById(R.id.layoutOverlay);
+        layoutMain = (RelativeLayout)findViewById(R.id.layoutMain);
+        txtOverlayText = (TextView)findViewById(R.id.txtOverlayText);
+        prgLoad = (ProgressBar)findViewById(R.id.prgLoad);
+        btnRefresh = (Button)findViewById(R.id.btnRefresh);
+
+        txtResults.setMovementMethod(new ScrollingMovementMethod());
     }
 
-    @Override
-    public void onClick(View v) {
-        presenter.validateInput(txtAmount.getText().toString());
+    public void onClick(View v)
+    {
+        switch(v.getId())
+        {
+            case R.id.btnConvert:
+                presenter.convert(txtAmount.getText().toString());
+                break;
+            case R.id.btnRefresh:
+                prgLoad.setVisibility(View.VISIBLE);
+                txtOverlayText.setText(R.string.please_wait);
+                presenter.refreshRates();
+                break;
+        }
     }
 
     @Override
@@ -42,9 +71,25 @@ public class MainActivity extends AppCompatActivity implements IMainView, View.O
     }
 
     @Override
-    public void displayRates()
+    public void displayRates(String ratesResult)
     {
+        txtResults.setText(ratesResult);
+    }
 
+    @Override
+    public void hideOverlay()
+    {
+        layoutOverlay.setVisibility(View.GONE);
+        layoutMain.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void displayNoRatesError(String error)
+    {
+        txtOverlayText.setText(error);
+        layoutOverlay.setClickable(false);
+        prgLoad.setVisibility(View.INVISIBLE);
+        btnRefresh.setVisibility(View.VISIBLE);
     }
 
     @Override

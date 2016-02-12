@@ -3,15 +3,13 @@ package com.vova.currencyconverter;
 import android.app.Application;
 
 import com.vova.currencyconverter.models.ExchangeRate;
-import com.vova.currencyconverter.net.IRateApi;
-
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import com.vova.currencyconverter.net.IRateService;
+import com.vova.currencyconverter.net.RateService;
 
 public class AppContext extends Application
 {
+    public static ExchangeRate rates;
+
     @Override
     public void onCreate()
     {
@@ -21,22 +19,10 @@ public class AppContext extends Application
 
     public void PopulateRates()
     {
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("http://api.fixer.io").build();
-        IRateApi rates = restAdapter.create(IRateApi.class);
-
-        rates.getRates("USD", new Callback<ExchangeRate>()
+        if (!RateService.isProcessing)
         {
-            @Override
-            public void success(ExchangeRate exchangeRate, Response response)
-            {
-                String test = "";
-            }
-
-            @Override
-            public void failure(RetrofitError error)
-            {
-                String test = "";
-            }
-        });
+            IRateService service = new RateService();
+            service.PopulateRates();
+        }
     }
 }

@@ -6,5 +6,7 @@ package com.vova.currencyconverter.activities.main;
 public interface IMainView
 {
     void displayError(String error);
-    void displayRates();
+    void displayRates(String ratesDisplay);
+    void hideOverlay();
+    void displayNoRatesError(String error);
 }
