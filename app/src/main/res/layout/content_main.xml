@@ -14,36 +14,56 @@
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="60dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".activities.main.MainActivity"
         tools:showIn="@layout/activity_main"
         android:focusable="true"
         android:id="@+id/layoutMain"
-        android:visibility="invisible">
+        android:visibility="visible"
+        android:paddingTop="60dp"
+        android:background="#eef9fb">
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:ems="10"
             android:id="@+id/txtAmount"
             android:singleLine="true"
             android:phoneNumber="false"
             android:numeric="integer"
-            android:layout_alignBottom="@+id/btnConvert"
-            android:layout_alignParentStart="true"
             android:selectAllOnFocus="true"
-            android:maxLength="9"/>
+            android:maxLength="9"
+            android:width="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"/>
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spnFromCurrency"
+            android:layout_alignTop="@+id/txtAmount"
+            android:layout_toEndOf="@+id/txtAmount"
+            android:layout_marginStart="25dp"
+            android:dropDownWidth="100dp"/>
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spnToCurrency"
+            android:layout_alignTop="@+id/txtAmount"
+            android:layout_toEndOf="@+id/spnFromCurrency"
+            android:layout_marginStart="25dp"
+            android:dropDownWidth="100dp"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="convert"
             android:id="@+id/btnConvert"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:onClick="onClick"/>
+            android:onClick="onClick"
+            android:layout_below="@+id/txtError"
+            android:layout_alignEnd="@+id/txtResults"
+            android:layout_alignParentStart="true"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -56,14 +76,16 @@
             android:textColor="#ff0000"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/txtResults"
-            android:layout_below="@+id/txtError"
             android:layout_alignParentStart="true"
-            android:layout_alignEnd="@+id/txtAmount"
-            android:scrollIndicators="right"/>
+            android:scrollIndicators="right"
+            android:background="#f5ecd7"
+            android:layout_below="@+id/btnConvert"/>
+
+
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -72,7 +94,8 @@
         android:id="@+id/layoutOverlay"
         android:clickable="false"
         android:layout_centerHorizontal="true"
-        android:focusable="true">
+        android:focusable="true"
+        >
 
         <ProgressBar
             android:id="@+id/prgLoad"

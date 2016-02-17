@@ -7,7 +7,6 @@ public class Currency
 {
     private String symbol;
     private BigDecimal amount;
-    DecimalFormat twoDForm = new DecimalFormat("#.##");
 
     public String getSymbol()
     {
@@ -27,11 +26,5 @@ public class Currency
     public void setSymbol(String symbol)
     {
         this.symbol = symbol;
-    }
-
-    @Override
-    public String toString()
-    {
-        return symbol + ": " + twoDForm.format(amount) + "\r\n";
     }
 }

@@ -8,6 +8,8 @@ import com.vova.currencyconverter.net.IRateService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -23,37 +25,31 @@ public class MainPresenter implements IMainPresenter
         EventBus.getDefault().register(this);
     }
 
-    public void convert(String amount)
+    public void convert(String amount, String fromCurrency, String toCurrency)
     {
-        theView.displayError("");
         if (validateInput(amount))
         {
-            StringBuilder sb = new StringBuilder();
-            ArrayList<Currency> currencies = service.GetCurrencies("USD", Integer.parseInt(amount));
-
-            Iterator it = currencies.iterator();
-            while (it.hasNext())
-            {
-                sb.append(((Currency)it.next()).toString());
-            }
-            theView.displayRates(sb.toString());
-        }
-        else
-        {
-            theView.displayError("Please enter a valid number.");
+            BigDecimal convertedAmount = service.convert(Integer.parseInt(amount), fromCurrency, toCurrency);
+            DecimalFormat twoDForm = new DecimalFormat("#,###.00");
+            DecimalFormat zeroDForm = new DecimalFormat("#,###");
+            theView.displayRates(String.format("%,d", Integer.parseInt(amount)) + fromCurrency + " = " + twoDForm.format(convertedAmount) + toCurrency);
         }
     }
 
     public void refreshRates()
     {
-        service.PopulateRates();
+        service.populateRates();
     }
 
     @Subscribe
     public void onRatesPopulated(MessageEvent event)
     {
         if (event.success)
+        {
+            ArrayList<String> currencies = service.getCurrenciesList();
+            theView.bindSpinners(currencies, currencies.indexOf("USD"), currencies.indexOf("EUR"));
             theView.hideOverlay();
+        }
         else
             theView.displayNoRatesError("There was an issue getting the rates.  Please try again.");
     }
@@ -62,10 +58,12 @@ public class MainPresenter implements IMainPresenter
     {
         if (amount.length() > 0 && Integer.parseInt(amount) > 0)
         {
+            theView.displayError("");
             return true;
         }
         else
         {
+            theView.displayError("Please enter a valid number.");
             return false;
         }
     }

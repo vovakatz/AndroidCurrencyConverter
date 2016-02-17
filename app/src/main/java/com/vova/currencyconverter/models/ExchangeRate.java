@@ -1,11 +1,9 @@
 package com.vova.currencyconverter.models;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by vkatz on 2/9/16.
- */
 public class ExchangeRate
 {
     private String base;

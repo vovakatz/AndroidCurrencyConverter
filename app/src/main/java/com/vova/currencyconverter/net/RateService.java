@@ -10,7 +10,9 @@ import com.vova.currencyconverter.models.MessageEvent;
 import org.greenrobot.eventbus.EventBus;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -28,7 +30,7 @@ public class RateService implements IRateService
     public static boolean isProcessing;
 
     @Override
-    public void PopulateRates()
+    public void populateRates()
     {
         if (isProcessing == false)
         {
@@ -40,7 +42,9 @@ public class RateService implements IRateService
                 {
                     if (response.isSuccess())
                     {
+                        isProcessing = false;
                         AppContext.rates = response.body();
+                        AppContext.rates.getRates().put(DEFAULT_CURRENCY, new BigDecimal("1"));
                         EventBus.getDefault().post(new MessageEvent(true));
                     }
                     else
@@ -62,21 +66,28 @@ public class RateService implements IRateService
     }
 
     @Override
-    public ArrayList<Currency> GetCurrencies(String base, int baseAmount)
+    public BigDecimal convert (int amount, String fromCurrency, String toCurrency)
     {
-        ArrayList<Currency> currencies = new ArrayList<>();
-        if (base == DEFAULT_CURRENCY)
+        BigDecimal fromRate = AppContext.rates.getRates().get(fromCurrency);
+        BigDecimal amountInUSD = new BigDecimal(amount).divide(fromRate, 2, RoundingMode.HALF_UP);
+
+        BigDecimal toRate = AppContext.rates.getRates().get(toCurrency);
+        BigDecimal amountInToCurrency = amountInUSD.multiply(toRate);
+
+        return amountInToCurrency;
+    }
+
+    @Override
+    public ArrayList<String> getCurrenciesList()
+    {
+        ArrayList<String> currencies = new ArrayList<String>();
+        Iterator it = AppContext.rates.getRates().entrySet().iterator();
+        while (it.hasNext())
         {
-            Iterator it = AppContext.rates.getRates().entrySet().iterator();
-            while (it.hasNext())
-            {
-                Map.Entry pair = (Map.Entry)it.next();
-                Currency currency = new Currency();
-                currency.setSymbol(pair.getKey().toString());
-                currency.setAmount(((BigDecimal) pair.getValue()).multiply(new BigDecimal(baseAmount)));
-                currencies.add(currency);
-            }
+            Map.Entry pair = (Map.Entry)it.next();
+            currencies.add(pair.getKey().toString());
         }
+        Collections.sort(currencies);
         return currencies;
     }
 

@@ -7,25 +7,37 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.vova.currencyconverter.AppContext;
 import com.vova.currencyconverter.R;
 import com.vova.currencyconverter.net.RateService;
 
+import java.util.ArrayList;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements IMainView
 {
-    private TextView txtError;
-    private EditText txtAmount;
-    private TextView txtResults;
-    private RelativeLayout layoutOverlay;
-    private RelativeLayout layoutMain;
-    private TextView txtOverlayText;
-    private ProgressBar prgLoad;
-    private Button btnRefresh;
+    @Bind(R.id.txtError) TextView txtError;
+    @Bind(R.id.txtAmount) EditText txtAmount;
+    @Bind(R.id.txtResults) TextView txtResults;
+    @Bind(R.id.layoutOverlay) RelativeLayout layoutOverlay;
+    @Bind(R.id.layoutMain) RelativeLayout layoutMain;
+    @Bind(R.id.txtOverlayText) TextView txtOverlayText;
+    @Bind(R.id.prgLoad) ProgressBar prgLoad;
+    @Bind(R.id.btnRefresh) Button btnRefresh;
+    @Bind(R.id.spnFromCurrency) Spinner spnFromCurrency;
+    @Bind(R.id.spnToCurrency) Spinner spnToCurrency;
+    @Bind(R.id.toolbar) Toolbar toolbar;
+
     private IMainPresenter presenter;
 
     @Override
@@ -33,19 +45,10 @@ public class MainActivity extends AppCompatActivity implements IMainView
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
         presenter = new MainPresenter(this, new RateService());
-        txtError = (TextView) findViewById(R.id.txtError);
-        txtAmount = (EditText) findViewById(R.id.txtAmount);
-        txtResults = (TextView)findViewById(R.id.txtResults);
-        layoutOverlay = (RelativeLayout)findViewById(R.id.layoutOverlay);
-        layoutMain = (RelativeLayout)findViewById(R.id.layoutMain);
-        txtOverlayText = (TextView)findViewById(R.id.txtOverlayText);
-        prgLoad = (ProgressBar)findViewById(R.id.prgLoad);
-        btnRefresh = (Button)findViewById(R.id.btnRefresh);
-
         txtResults.setMovementMethod(new ScrollingMovementMethod());
     }
 
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements IMainView
         switch(v.getId())
         {
             case R.id.btnConvert:
-                presenter.convert(txtAmount.getText().toString());
+                presenter.convert(txtAmount.getText().toString(), spnFromCurrency.getSelectedItem().toString(), spnToCurrency.getSelectedItem().toString());
                 break;
             case R.id.btnRefresh:
                 prgLoad.setVisibility(View.VISIBLE);
@@ -74,6 +77,20 @@ public class MainActivity extends AppCompatActivity implements IMainView
     public void displayRates(String ratesResult)
     {
         txtResults.setText(ratesResult);
+    }
+
+    @Override
+    public void bindSpinners(ArrayList<String> currencies, int defaultFromCurrencyPosition, int defaultToCurrencyPosition)
+    {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,
+                android.R.layout.simple_spinner_item, currencies);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnFromCurrency.setAdapter(adapter);
+        spnToCurrency.setAdapter(adapter);
+
+        spnFromCurrency.setSelection(defaultFromCurrencyPosition);
+        spnToCurrency.setSelection(defaultToCurrencyPosition);
     }
 
     @Override
