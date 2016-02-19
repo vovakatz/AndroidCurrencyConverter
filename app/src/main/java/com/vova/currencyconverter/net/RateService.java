@@ -60,7 +60,7 @@ public class RateService implements IRateService
         });
     }
 
-    public void populateHistoricRates(final Date date, String baseCurrency, String targetCurrency)
+    public void populateHistoricRates(final Date date, final String baseCurrency, final String targetCurrency)
     {
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -72,22 +72,24 @@ public class RateService implements IRateService
                 if (response.isSuccess())
                 {
                     AppContext.historicRates.add(response.body());
-                    EventBus.getDefault().post(new HistoricalRateEvent(true));
+                    EventBus.getDefault().post(new HistoricalRateEvent(true, baseCurrency, targetCurrency));
                     Log.i("HISTORIC RATES", "Service executed successfully for " + sdf.format(date));
                 }
                 else
                 {
-                    EventBus.getDefault().post(new HistoricalRateEvent(false));
-                    Log.e("Error occurred", "Remote server call returned an error while getting historic rates");
+                    EventBus.getDefault().post(new HistoricalRateEvent(false, null, null));
+                    Log.e("Error occurred", "Remote server call returned an error while getting historical rates");
+                    //// TODO: 2/19/16 Cancel the rest of the calls
                 }
             }
 
             @Override
             public void onFailure(Throwable t)
             {
-                EventBus.getDefault().post(new HistoricalRateEvent(false));
+                EventBus.getDefault().post(new HistoricalRateEvent(false, null, null));
                 String message = t.getMessage();
                 Log.e("Error occurred", message == null ? "Remote server call returned an error" : message);
+                //// TODO: 2/19/16 Cancel the rest of the calls
             }
         });
     }

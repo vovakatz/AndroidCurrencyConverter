@@ -31,7 +31,6 @@ public class MainPresenter implements IMainPresenter
         {
             BigDecimal convertedAmount = service.convert(Integer.parseInt(amount), fromCurrency, toCurrency);
             DecimalFormat twoDForm = new DecimalFormat("#,###.00");
-            DecimalFormat zeroDForm = new DecimalFormat("#,###");
             theView.displayRates(String.format("%,d", Integer.parseInt(amount)) + fromCurrency + " = " + twoDForm.format(convertedAmount) + toCurrency);
             getHistoricRates(fromCurrency, toCurrency);
         }
@@ -45,7 +44,8 @@ public class MainPresenter implements IMainPresenter
     public void getHistoricRates(String fromCurrency, String toCurrency)
     {
         DateTime date = DateTime.now();
-
+        AppContext.numberOfCallsInitiated = 0;
+        AppContext.historicRates = new ArrayList<>();
         for (int i = 0; i < 12; i++)
         {
             AppContext.numberOfCallsInitiated++;

@@ -1,5 +1,7 @@
 package com.vova.currencyconverter.models;
 
+import org.joda.time.DateTime;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +18,11 @@ public class ExchangeRate
 
     public String getDate() {
         return this.date;
+    }
+
+    public DateTime getDateTime()
+    {
+        return new DateTime(date);
     }
 
     public HashMap<String, BigDecimal> getRates() {
