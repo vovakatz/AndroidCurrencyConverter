@@ -3,16 +3,18 @@ package com.vova.currencyconverter.net;
 import android.util.Log;
 
 import com.vova.currencyconverter.AppContext;
-import com.vova.currencyconverter.models.Currency;
 import com.vova.currencyconverter.models.ExchangeRate;
-import com.vova.currencyconverter.models.MessageEvent;
+import com.vova.currencyconverter.models.HistoricalRateEvent;
+import com.vova.currencyconverter.models.RateEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -27,42 +29,67 @@ public class RateService implements IRateService
     private final String DEFAULT_CURRENCY = "USD";
 
     private static IRateApi service;
-    public static boolean isProcessing;
 
     @Override
     public void populateRates()
     {
-        if (isProcessing == false)
+        getService().getRates(DEFAULT_CURRENCY).enqueue(new Callback<ExchangeRate>()
         {
-            isProcessing = true;
-            getService().getRates(DEFAULT_CURRENCY).enqueue(new Callback<ExchangeRate>()
+            @Override
+            public void onResponse(Response<ExchangeRate> response)
             {
-                @Override
-                public void onResponse(Response<ExchangeRate> response)
+                if (response.isSuccess())
                 {
-                    if (response.isSuccess())
-                    {
-                        isProcessing = false;
-                        AppContext.rates = response.body();
-                        AppContext.rates.getRates().put(DEFAULT_CURRENCY, new BigDecimal("1"));
-                        EventBus.getDefault().post(new MessageEvent(true));
-                    }
-                    else
-                    {
-                        isProcessing = false;
-                        EventBus.getDefault().post(new MessageEvent(false));
-                    }
+                    AppContext.rates = response.body();
+                    AppContext.rates.getRates().put(DEFAULT_CURRENCY, new BigDecimal("1"));
+                    EventBus.getDefault().post(new RateEvent(true));
                 }
+                else
+                {
+                    EventBus.getDefault().post(new RateEvent(false));
+                }
+            }
 
-                @Override
-                public void onFailure(Throwable t)
+            @Override
+            public void onFailure(Throwable t)
+            {
+                EventBus.getDefault().post(new RateEvent(false));
+                String message = t.getMessage();
+                Log.e("Error occurred", message == null ? "Remote server call returned an error" : message);
+            }
+        });
+    }
+
+    public void populateHistoricRates(final Date date, String baseCurrency, String targetCurrency)
+    {
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        getService().getHistoricRates(sdf.format(date), baseCurrency, targetCurrency).enqueue(new Callback<ExchangeRate>()
+        {
+            @Override
+            public void onResponse(Response<ExchangeRate> response)
+            {
+                if (response.isSuccess())
                 {
-                    Log.e("Error occured", t.getMessage());
-                    EventBus.getDefault().post(new MessageEvent(false));
-                    isProcessing = false;
+                    AppContext.historicRates.add(response.body());
+                    EventBus.getDefault().post(new HistoricalRateEvent(true));
+                    Log.i("HISTORIC RATES", "Service executed successfully for " + sdf.format(date));
                 }
-            });
-        }
+                else
+                {
+                    EventBus.getDefault().post(new HistoricalRateEvent(false));
+                    Log.e("Error occurred", "Remote server call returned an error while getting historic rates");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t)
+            {
+                EventBus.getDefault().post(new HistoricalRateEvent(false));
+                String message = t.getMessage();
+                Log.e("Error occurred", message == null ? "Remote server call returned an error" : message);
+            }
+        });
     }
 
     @Override

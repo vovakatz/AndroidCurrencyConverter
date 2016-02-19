@@ -1,10 +1,10 @@
 package com.vova.currencyconverter.models;
 
-public class MessageEvent
+public class HistoricalRateEvent
 {
     public final Boolean success;
 
-    public MessageEvent(Boolean success)
+    public HistoricalRateEvent(Boolean success)
     {
         this.success = success;
     }

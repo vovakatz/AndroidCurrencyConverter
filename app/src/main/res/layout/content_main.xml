@@ -56,7 +56,7 @@
             android:dropDownWidth="100dp"/>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="convert"
             android:id="@+id/btnConvert"
@@ -77,13 +77,21 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/txtResults"
             android:layout_alignParentStart="true"
             android:scrollIndicators="right"
             android:background="#f5ecd7"
-            android:layout_below="@+id/btnConvert"/>
+            android:layout_below="@+id/btnConvert"
+            android:gravity="center"/>
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.vova.currencyconverter.fragments.HistoricalRates.HistoricalRatesFragment"
+            android:id="@+id/frgHistoricalRates"
+            android:layout_below="@+id/txtResults"/>
 
 
     </RelativeLayout>

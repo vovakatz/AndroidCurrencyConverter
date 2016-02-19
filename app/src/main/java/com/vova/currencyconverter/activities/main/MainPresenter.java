@@ -1,17 +1,17 @@
 package com.vova.currencyconverter.activities.main;
 
 
-import com.vova.currencyconverter.models.Currency;
-import com.vova.currencyconverter.models.MessageEvent;
+import com.vova.currencyconverter.AppContext;
+import com.vova.currencyconverter.models.RateEvent;
 import com.vova.currencyconverter.net.IRateService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class MainPresenter implements IMainPresenter
 {
@@ -33,6 +33,7 @@ public class MainPresenter implements IMainPresenter
             DecimalFormat twoDForm = new DecimalFormat("#,###.00");
             DecimalFormat zeroDForm = new DecimalFormat("#,###");
             theView.displayRates(String.format("%,d", Integer.parseInt(amount)) + fromCurrency + " = " + twoDForm.format(convertedAmount) + toCurrency);
+            getHistoricRates(fromCurrency, toCurrency);
         }
     }
 
@@ -41,8 +42,20 @@ public class MainPresenter implements IMainPresenter
         service.populateRates();
     }
 
+    public void getHistoricRates(String fromCurrency, String toCurrency)
+    {
+        DateTime date = DateTime.now();
+
+        for (int i = 0; i < 12; i++)
+        {
+            AppContext.numberOfCallsInitiated++;
+            service.populateHistoricRates(date.toDate(), fromCurrency, toCurrency);
+            date = date.minusMonths(1);
+        }
+    }
+
     @Subscribe
-    public void onRatesPopulated(MessageEvent event)
+    public void onRatesPopulated(RateEvent event)
     {
         if (event.success)
         {
