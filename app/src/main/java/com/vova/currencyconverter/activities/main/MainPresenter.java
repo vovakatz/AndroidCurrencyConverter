@@ -27,7 +27,7 @@ public class MainPresenter implements IMainPresenter
 
     public void convert(String amount, String fromCurrency, String toCurrency)
     {
-        if (validateInput(amount))
+        if (validateInput(amount, fromCurrency, toCurrency))
         {
             BigDecimal convertedAmount = service.convert(Integer.parseInt(amount), fromCurrency, toCurrency);
             DecimalFormat twoDForm = new DecimalFormat("#,###.00");
@@ -67,17 +67,20 @@ public class MainPresenter implements IMainPresenter
             theView.displayNoRatesError("There was an issue getting the rates.  Please try again.");
     }
 
-    private boolean validateInput(String amount)
+    private boolean validateInput(String amount, String fromCurrency, String toCurrency)
     {
-        if (amount.length() > 0 && Integer.parseInt(amount) > 0)
-        {
-            theView.displayError("");
-            return true;
-        }
-        else
+        theView.displayError("");
+        if (amount.length() == 0 || Integer.parseInt(amount) == 0)
         {
             theView.displayError("Please enter a valid number.");
             return false;
         }
+        if (fromCurrency == toCurrency)
+        {
+            theView.displayError("Base and target currencies can't be the same.");
+            return false;
+        }
+
+        return true;
     }
 }

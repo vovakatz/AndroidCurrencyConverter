@@ -41,24 +41,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/spnFromCurrency"
-            android:layout_alignTop="@+id/txtAmount"
             android:layout_toEndOf="@+id/txtAmount"
-            android:layout_marginStart="25dp"
-            android:dropDownWidth="100dp"/>
+            android:dropDownWidth="75dp"
+            android:paddingTop="14dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btnSwap_text"
+            android:id="@+id/btnSwap"
+            android:onClick="onClick"
+            android:layout_toEndOf="@+id/spnFromCurrency"/>
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/spnToCurrency"
-            android:layout_alignTop="@+id/txtAmount"
-            android:layout_toEndOf="@+id/spnFromCurrency"
-            android:layout_marginStart="25dp"
-            android:dropDownWidth="100dp"/>
+            android:layout_toEndOf="@+id/btnSwap"
+            android:dropDownWidth="75dp"
+            android:paddingTop="14dp"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="convert"
+            android:text="@string/btnConvert_text"
             android:id="@+id/btnConvert"
             android:onClick="onClick"
             android:layout_below="@+id/txtError"
@@ -81,7 +87,6 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/txtResults"
             android:layout_alignParentStart="true"
-            android:scrollIndicators="right"
             android:background="#f5ecd7"
             android:layout_below="@+id/btnConvert"
             android:gravity="center"/>

@@ -64,6 +64,11 @@ public class MainActivity extends AppCompatActivity implements IMainView
                 txtOverlayText.setText(R.string.please_wait);
                 presenter.refreshRates();
                 break;
+            case R.id.btnSwap:
+                int selectedFromPosition = spnFromCurrency.getSelectedItemPosition();
+                spnFromCurrency.setSelection(spnToCurrency.getSelectedItemPosition());
+                spnToCurrency.setSelection(selectedFromPosition);
+                break;
         }
     }
 
