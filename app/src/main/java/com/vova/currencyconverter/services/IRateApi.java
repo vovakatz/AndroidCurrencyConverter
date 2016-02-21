@@ -1,4 +1,4 @@
-package com.vova.currencyconverter.net;
+package com.vova.currencyconverter.services;
 
 import com.vova.currencyconverter.models.ExchangeRate;
 

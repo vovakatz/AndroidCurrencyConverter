@@ -1,4 +1,4 @@
-package com.vova.currencyconverter.net;
+package com.vova.currencyconverter.services;
 
 import android.util.Log;
 
@@ -104,20 +104,6 @@ public class RateService implements IRateService
         BigDecimal amountInToCurrency = amountInUSD.multiply(toRate);
 
         return amountInToCurrency;
-    }
-
-    @Override
-    public ArrayList<String> getCurrenciesList()
-    {
-        ArrayList<String> currencies = new ArrayList<String>();
-        Iterator it = AppContext.rates.getRates().entrySet().iterator();
-        while (it.hasNext())
-        {
-            Map.Entry pair = (Map.Entry)it.next();
-            currencies.add(pair.getKey().toString());
-        }
-        Collections.sort(currencies);
-        return currencies;
     }
 
     private IRateApi getService()

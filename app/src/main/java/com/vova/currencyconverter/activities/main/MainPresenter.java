@@ -2,8 +2,9 @@ package com.vova.currencyconverter.activities.main;
 
 
 import com.vova.currencyconverter.AppContext;
+import com.vova.currencyconverter.Constants;
 import com.vova.currencyconverter.models.RateEvent;
-import com.vova.currencyconverter.net.IRateService;
+import com.vova.currencyconverter.services.IRateService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -59,8 +60,7 @@ public class MainPresenter implements IMainPresenter
     {
         if (event.success)
         {
-            ArrayList<String> currencies = service.getCurrenciesList();
-            theView.bindSpinners(currencies, currencies.indexOf("USD"), currencies.indexOf("EUR"));
+            theView.bindSpinners(Constants.CURRENCY_CODES, Constants.DEFAULT_BASE_CURRENCY, Constants.DEFAULT_TARGET_CURRENCY);
             theView.hideOverlay();
         }
         else

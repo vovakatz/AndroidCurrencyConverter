@@ -52,17 +52,19 @@ public class HistoricalRatesFragment extends Fragment implements IHistoricalRate
         }
 
         ILineDataSet lineDataSet = new LineDataSet(vals, targetCurrency +  " per 1 " + baseCurrency);
+        lineDataSet.setDrawFilled(true);
         ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
         dataSets.add(lineDataSet);
 
         LineData data = new LineData(xVals, dataSets);
         chart.setData(data);
+        chart.setDescription("");
         chart.invalidate();
     }
 
     @Override
     public void displayError(String error)
     {
-        Toast.makeText(getContext(), "I will NOT draw the graph.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
     }
 }

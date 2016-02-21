@@ -1,5 +1,6 @@
 package com.vova.currencyconverter.activities.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,11 +16,14 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.vova.currencyconverter.AppContext;
+import com.vova.currencyconverter.Constants;
 import com.vova.currencyconverter.R;
-import com.vova.currencyconverter.net.RateService;
+import com.vova.currencyconverter.activities.setting.SettingsActivity;
+import com.vova.currencyconverter.services.RateService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -85,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements IMainView
     }
 
     @Override
-    public void bindSpinners(ArrayList<String> currencies, int defaultFromCurrencyPosition, int defaultToCurrencyPosition)
+    public void bindSpinners(String [] currencies, String defaultBaseCurrency, String defaultTargetCurrency)
     {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,
                 android.R.layout.simple_spinner_item, currencies);
@@ -94,8 +98,10 @@ public class MainActivity extends AppCompatActivity implements IMainView
         spnFromCurrency.setAdapter(adapter);
         spnToCurrency.setAdapter(adapter);
 
-        spnFromCurrency.setSelection(defaultFromCurrencyPosition);
-        spnToCurrency.setSelection(defaultToCurrencyPosition);
+        List<String> currencyList = Arrays.asList(currencies);
+
+        spnFromCurrency.setSelection(currencyList.indexOf(defaultBaseCurrency));
+        spnToCurrency.setSelection(currencyList.indexOf(defaultTargetCurrency));
     }
 
     @Override
@@ -121,9 +127,13 @@ public class MainActivity extends AppCompatActivity implements IMainView
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
             case R.id.action_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

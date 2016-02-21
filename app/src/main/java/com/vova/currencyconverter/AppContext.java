@@ -4,13 +4,12 @@ import android.app.Application;
 import android.util.Log;
 
 import com.vova.currencyconverter.models.ExchangeRate;
-import com.vova.currencyconverter.net.IRateService;
-import com.vova.currencyconverter.net.RateService;
+import com.vova.currencyconverter.services.IRateService;
+import com.vova.currencyconverter.services.RateService;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;

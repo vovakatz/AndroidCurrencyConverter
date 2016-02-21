@@ -9,7 +9,7 @@ public interface IMainView
 {
     void displayError(String error);
     void displayRates(String ratesDisplay);
-    void bindSpinners(ArrayList<String> currencies, int defaultFromCurrencyPosition, int defaultToCurrencyPosition);
+    void bindSpinners(String [] currencies, String defaultBaseCurrency, String defaultTargetCurrency);
     void hideOverlay();
     void displayNoRatesError(String error);
 }
