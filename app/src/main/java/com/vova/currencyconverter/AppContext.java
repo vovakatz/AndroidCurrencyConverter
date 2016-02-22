@@ -26,13 +26,13 @@ public class AppContext extends Application
         super.onCreate();
         JodaTimeAndroid.init(this);
         populateRates();
-        //scheduleRatesUpdates();
+        scheduleRatesUpdates();
     }
 
     public void populateRates()
     {
         IRateService service = new RateService();
-        service.populateRates();
+        service.populateRates(true);
     }
 
     private void scheduleRatesUpdates()
@@ -46,7 +46,7 @@ public class AppContext extends Application
                     public void run()
                     {
                         IRateService service = new RateService();
-                        service.populateRates();
+                        service.populateRates(false);
                         Log.i("RateService", "Update rates service has just been called!");
                     }
                 }, 15, 15, TimeUnit.MINUTES);

@@ -39,7 +39,7 @@ public class MainPresenter implements IMainPresenter
 
     public void refreshRates()
     {
-        service.populateRates();
+        service.populateRates(true);
     }
 
     public void getHistoricRates(String fromCurrency, String toCurrency)

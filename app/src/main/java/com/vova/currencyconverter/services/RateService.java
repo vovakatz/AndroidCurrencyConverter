@@ -31,7 +31,7 @@ public class RateService implements IRateService
     private static IRateApi service;
 
     @Override
-    public void populateRates()
+    public void populateRates(final Boolean triggerEvent)
     {
         getService().getRates(DEFAULT_CURRENCY).enqueue(new Callback<ExchangeRate>()
         {
@@ -42,18 +42,21 @@ public class RateService implements IRateService
                 {
                     AppContext.rates = response.body();
                     AppContext.rates.getRates().put(DEFAULT_CURRENCY, new BigDecimal("1"));
-                    EventBus.getDefault().post(new RateEvent(true));
+                    if (triggerEvent)
+                        EventBus.getDefault().post(new RateEvent(true));
                 }
                 else
                 {
-                    EventBus.getDefault().post(new RateEvent(false));
+                    if (triggerEvent)
+                        EventBus.getDefault().post(new RateEvent(false));
                 }
             }
 
             @Override
             public void onFailure(Throwable t)
             {
-                EventBus.getDefault().post(new RateEvent(false));
+                if (triggerEvent)
+                    EventBus.getDefault().post(new RateEvent(false));
                 String message = t.getMessage();
                 Log.e("Error occurred", message == null ? "Remote server call returned an error" : message);
             }
