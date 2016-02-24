@@ -1,6 +1,7 @@
 package com.vova.currencyconverter;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import com.vova.currencyconverter.models.ExchangeRate;
@@ -16,17 +17,22 @@ import java.util.concurrent.TimeUnit;
 
 public class AppContext extends Application
 {
-    public static ExchangeRate rates;
-    public static ArrayList<ExchangeRate> historicRates = new ArrayList<ExchangeRate>();
+    private static Context context;
     public static int numberOfCallsInitiated;
 
     @Override
     public void onCreate()
     {
         super.onCreate();
+        context = getApplicationContext();
         JodaTimeAndroid.init(this);
         populateRates();
         scheduleRatesUpdates();
+    }
+
+    public static Context getContext()
+    {
+        return context;
     }
 
     public void populateRates()

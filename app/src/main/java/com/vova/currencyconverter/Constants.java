@@ -5,7 +5,9 @@ public class Constants
     public static final String CURRENCY_URL = "http://api.fixer.io";
     public static final String DEFAULT_BASE_CURRENCY = "USD";
     public static final String DEFAULT_TARGET_CURRENCY = "EUR";
-
+    public static final String RATES_PREFERENCES = "RATES_PREFERENCES";
+    public static final String EXCHANGE_RATES = "EXCHANGE_RATES";
+    public static final String HISTORICAL_EXCHANGE_RATES = "HISTORICAL_EXCHANGE_RATES";
 
     public static final String[] CURRENCY_CODES = {
             "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HRK",

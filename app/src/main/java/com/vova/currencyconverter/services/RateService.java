@@ -1,11 +1,13 @@
 package com.vova.currencyconverter.services;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.vova.currencyconverter.AppContext;
 import com.vova.currencyconverter.models.ExchangeRate;
 import com.vova.currencyconverter.models.HistoricalRateEvent;
 import com.vova.currencyconverter.models.RateEvent;
+import com.vova.currencyconverter.utils.SharedPreferencesUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -40,8 +42,10 @@ public class RateService implements IRateService
             {
                 if (response.isSuccess())
                 {
-                    AppContext.rates = response.body();
-                    AppContext.rates.getRates().put(DEFAULT_CURRENCY, new BigDecimal("1"));
+                    ExchangeRate rates = response.body();
+                    rates.getRates().put(DEFAULT_CURRENCY, new BigDecimal("1"));
+                    SharedPreferencesUtils.setExchangeRates(rates);
+
                     if (triggerEvent)
                         EventBus.getDefault().post(new RateEvent(true));
                 }
@@ -63,7 +67,7 @@ public class RateService implements IRateService
         });
     }
 
-    public void populateHistoricRates(final Date date, final String baseCurrency, final String targetCurrency)
+    public void populateHistoricalRates(final Date date, final String baseCurrency, final String targetCurrency)
     {
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -74,7 +78,9 @@ public class RateService implements IRateService
             {
                 if (response.isSuccess())
                 {
-                    AppContext.historicRates.add(response.body());
+                    ArrayList<ExchangeRate> historicalRates = SharedPreferencesUtils.getHistoricalExchangeRates();
+                    historicalRates.add(response.body());
+                    SharedPreferencesUtils.setHistoricalExchangeRates(historicalRates);
                     EventBus.getDefault().post(new HistoricalRateEvent(true, baseCurrency, targetCurrency));
                     Log.i("HISTORIC RATES", "Service executed successfully for " + sdf.format(date));
                 }
@@ -91,7 +97,7 @@ public class RateService implements IRateService
             {
                 EventBus.getDefault().post(new HistoricalRateEvent(false, null, null));
                 String message = t.getMessage();
-                Log.e("Error occurred", message == null ? "Remote server call returned an error" : message);
+                Log.e("Error occurred", message == null ? "Remote server call returned an error " + sdf.format(date) : message);
                 //// TODO: 2/19/16 Cancel the rest of the calls
             }
         });
@@ -100,10 +106,12 @@ public class RateService implements IRateService
     @Override
     public BigDecimal convert (int amount, String fromCurrency, String toCurrency)
     {
-        BigDecimal fromRate = AppContext.rates.getRates().get(fromCurrency);
+        ExchangeRate rates = SharedPreferencesUtils.getExchangeRates();
+
+        BigDecimal fromRate = rates.getRates().get(fromCurrency);
         BigDecimal amountInUSD = new BigDecimal(amount).divide(fromRate, 2, RoundingMode.HALF_UP);
 
-        BigDecimal toRate = AppContext.rates.getRates().get(toCurrency);
+        BigDecimal toRate = rates.getRates().get(toCurrency);
         BigDecimal amountInToCurrency = amountInUSD.multiply(toRate);
 
         return amountInToCurrency;

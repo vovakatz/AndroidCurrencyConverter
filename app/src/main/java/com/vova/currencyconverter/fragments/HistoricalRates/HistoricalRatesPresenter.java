@@ -3,11 +3,13 @@ package com.vova.currencyconverter.fragments.HistoricalRates;
 import com.vova.currencyconverter.AppContext;
 import com.vova.currencyconverter.models.ExchangeRate;
 import com.vova.currencyconverter.models.HistoricalRateEvent;
+import com.vova.currencyconverter.utils.SharedPreferencesUtils;
 
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -29,7 +31,9 @@ public class HistoricalRatesPresenter implements IHistoricalRatesPresenter
             AppContext.numberOfCallsInitiated--;
             if (AppContext.numberOfCallsInitiated == 0)
             {
-                Collections.sort(AppContext.historicRates, byDate);
+                ArrayList<ExchangeRate> historicalRates = SharedPreferencesUtils.getHistoricalExchangeRates();
+                Collections.sort(historicalRates, byDate);
+                SharedPreferencesUtils.setHistoricalExchangeRates(historicalRates);
                 theView.drawGraph(event.baseCurrency, event.targetCurrency);
             }
         }

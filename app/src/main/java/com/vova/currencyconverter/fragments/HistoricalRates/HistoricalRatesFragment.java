@@ -14,6 +14,8 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.vova.currencyconverter.AppContext;
 import com.vova.currencyconverter.R;
+import com.vova.currencyconverter.models.ExchangeRate;
+import com.vova.currencyconverter.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 
@@ -43,12 +45,13 @@ public class HistoricalRatesFragment extends Fragment implements IHistoricalRate
 
         ArrayList<Entry> vals = new ArrayList<Entry>();
         ArrayList<String> xVals = new ArrayList<String>();
+        ArrayList<ExchangeRate> historicRates = SharedPreferencesUtils.getHistoricalExchangeRates();
 
-        for(int i = 0; i < AppContext.historicRates.size(); i++)
+        for(int i = 0; i < historicRates.size(); i++)
         {
-            Entry entry = new Entry(AppContext.historicRates.get(i).getRates().get(targetCurrency).floatValue(), i);
+            Entry entry = new Entry(historicRates.get(i).getRates().get(targetCurrency).floatValue(), i);
             vals.add(entry);
-            xVals.add(AppContext.historicRates.get(i).getDate());
+            xVals.add(historicRates.get(i).getDate());
         }
 
         ILineDataSet lineDataSet = new LineDataSet(vals, targetCurrency +  " per 1 " + baseCurrency);
