@@ -1,18 +1,12 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
              tools:context="com.vova.currencyconverter.fragments.HistoricalRates.HistoricalRatesFragment">
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtInfo"
-        android:gravity="center_vertical|center_horizontal"/>
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chrRates"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
 
 </FrameLayout>

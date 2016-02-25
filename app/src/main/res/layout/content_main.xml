@@ -91,14 +91,23 @@
             android:layout_below="@+id/btnConvert"
             android:gravity="center"/>
 
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtLastUpdated"
+            android:layout_below="@+id/txtResults"
+            android:layout_alignParentStart="false"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_alignParentEnd="false"
+            android:gravity="center"/>
+
         <fragment
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:name="com.vova.currencyconverter.fragments.HistoricalRates.HistoricalRatesFragment"
             android:id="@+id/frgHistoricalRates"
-            android:layout_below="@+id/txtResults"/>
-
-
+            android:layout_below="@+id/txtLastUpdated"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"

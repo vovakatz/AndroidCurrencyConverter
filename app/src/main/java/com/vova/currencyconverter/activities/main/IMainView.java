@@ -8,8 +8,10 @@ import java.util.ArrayList;
 public interface IMainView
 {
     void displayError(String error);
+    void displayWarning(String warning);
     void displayRates(String ratesDisplay);
     void bindSpinners(String [] currencies, String defaultBaseCurrency, String defaultTargetCurrency);
     void hideOverlay();
     void displayNoRatesError(String error);
+    void setLastUpdatedTime(String message);
 }

@@ -1,12 +1,8 @@
 package com.vova.currencyconverter.activities.main;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,22 +11,22 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.vova.currencyconverter.Constants;
 import com.vova.currencyconverter.R;
-import com.vova.currencyconverter.activities.setting.SettingsActivity;
+import com.vova.currencyconverter.activities.base.BaseActivity;
 import com.vova.currencyconverter.services.RateService;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements IMainView
+public class MainActivity extends BaseActivity implements IMainView
 {
     @Bind(R.id.txtError) TextView txtError;
+    @Bind(R.id.txtLastUpdated) TextView txtLastUpdated;
     @Bind(R.id.txtAmount) EditText txtAmount;
     @Bind(R.id.txtResults) TextView txtResults;
     @Bind(R.id.layoutOverlay) RelativeLayout layoutOverlay;
@@ -53,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements IMainView
         setSupportActionBar(toolbar);
 
         presenter = new MainPresenter(this, new RateService());
-        txtResults.setMovementMethod(new ScrollingMovementMethod());
+        presenter.init();
     }
 
     public void onClick(View v)
@@ -80,6 +76,12 @@ public class MainActivity extends AppCompatActivity implements IMainView
     public void displayError(String error)
     {
         txtError.setText(error);
+    }
+
+    @Override
+    public void displayWarning(String warning)
+    {
+        Toast.makeText(getApplicationContext(), warning, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -121,22 +123,8 @@ public class MainActivity extends AppCompatActivity implements IMainView
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
+    public void setLastUpdatedTime(String message)
     {
-        switch (item.getItemId())
-        {
-            case R.id.action_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        txtLastUpdated.setText(message);
     }
 }

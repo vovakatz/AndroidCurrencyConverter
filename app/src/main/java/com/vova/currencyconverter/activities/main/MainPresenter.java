@@ -11,6 +11,8 @@ import com.vova.currencyconverter.utils.SharedPreferencesUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -25,7 +27,13 @@ public class MainPresenter implements IMainPresenter
     {
         this.theView = view;
         this.service = service;
+    }
+
+    @Override
+    public void init()
+    {
         EventBus.getDefault().register(this);
+        theView.bindSpinners(Constants.CURRENCY_CODES, Constants.DEFAULT_BASE_CURRENCY, Constants.DEFAULT_TARGET_CURRENCY);
     }
 
     public void convert(String amount, String fromCurrency, String toCurrency)
@@ -60,13 +68,26 @@ public class MainPresenter implements IMainPresenter
     @Subscribe
     public void onRatesPopulated(RateEvent event)
     {
+        DateTimeFormatter dayPart = DateTimeFormat.forPattern("MMMM dd, yyyy");
+        DateTimeFormatter timePart = DateTimeFormat.forPattern("KK:mm a");
         if (event.success)
         {
-            theView.bindSpinners(Constants.CURRENCY_CODES, Constants.DEFAULT_BASE_CURRENCY, Constants.DEFAULT_TARGET_CURRENCY);
             theView.hideOverlay();
+            DateTime dt = new DateTime();
+            theView.setLastUpdatedTime("Rates last updated on " + dayPart.print(dt) + " at " + timePart.print(dt));
         }
         else
-            theView.displayNoRatesError("There was an issue getting the rates.  Please try again.");
+        {
+            ExchangeRate exchangeRate = SharedPreferencesUtils.getExchangeRates();
+            if (exchangeRate != null)
+            {
+                theView.displayWarning("There was an error getting current rates.  Previous rates will be used instead.");
+                theView.hideOverlay();
+                theView.setLastUpdatedTime("Rates last updated on " + dayPart.print(exchangeRate.getDateTime()) + " at " + timePart.print(exchangeRate.getDateTime()));
+            }
+            else
+                theView.displayNoRatesError("There was an issue getting the rates.  Please try again.");
+        }
     }
 
     private boolean validateInput(String amount, String fromCurrency, String toCurrency)

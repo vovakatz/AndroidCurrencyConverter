@@ -12,7 +12,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.vova.currencyconverter.AppContext;
 import com.vova.currencyconverter.R;
 import com.vova.currencyconverter.models.ExchangeRate;
 import com.vova.currencyconverter.utils.SharedPreferencesUtils;
@@ -68,6 +67,6 @@ public class HistoricalRatesFragment extends Fragment implements IHistoricalRate
     @Override
     public void displayError(String error)
     {
-        Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
     }
 }
