@@ -33,6 +33,10 @@ public class BaseActivity extends AppCompatActivity
                 rateService.populateRates(true);
                 return true;
             case R.id.action_quit:
+                int pid = android.os.Process.myPid();
+                android.os.Process.killProcess(pid);
+                System.exit(0);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

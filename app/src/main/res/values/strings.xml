@@ -15,19 +15,73 @@
         based on your message history
     </string>
 
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
+    <string-array name="currency_list_titles">
+        <item>Australian Dollar</item>
+        <item>Bulgarian Lev</item>
+        <item>Brazilian Real</item>
+        <item>Canadian Dollar</item>
+        <item>Swiss Franc</item>
+        <item>Yuan Renminbi</item>
+        <item>Czech Koruna</item>
+        <item>Danish Krone</item>
+        <item>Euro</item>
+        <item>Pound Sterling</item>
+        <item>Hong Kong Dollar</item>
+        <item>Croatian Kuna</item>
+        <item>Hungarian Forint</item>
+        <item>Indonesian Rupiah</item>
+        <item>Israeli New Shekel</item>
+        <item>Indian Rupee</item>
+        <item>Japanese Yen</item>
+        <item>Korean Won</item>
+        <item>Mexican Nuevo Peso</item>
+        <item>Malaysian Ringgit</item>
+        <item>Norwegian Krone</item>
+        <item>New Zealand Dollar</item>
+        <item>Philippine Peso</item>
+        <item>Polish Zloty</item>
+        <item>Romanian New Leu</item>
+        <item>Belarussian Ruble</item>
+        <item>Swedish Krona</item>
+        <item>Singapore Dollar</item>
+        <item>Thai Baht</item>
+        <item>Turkish Lira</item>
+        <item>US Dollar</item>
+        <item>South African Rand</item>
     </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
+    <string-array name="currency_list_values">
+        <item>AUD</item>
+        <item>BGN</item>
+        <item>BRL</item>
+        <item>CAD</item>
+        <item>CHF</item>
+        <item>CNY</item>
+        <item>CZK</item>
+        <item>DKK</item>
+        <item>EUR</item>
+        <item>GBP</item>
+        <item>HKD</item>
+        <item>HRK</item>
+        <item>HUF</item>
+        <item>IDR</item>
+        <item>ILS</item>
+        <item>INR</item>
+        <item>JPY</item>
+        <item>KRW</item>
+        <item>MXN</item>
+        <item>MYR</item>
+        <item>NOK</item>
+        <item>NZD</item>
+        <item>PHP</item>
+        <item>PLN</item>
+        <item>RON</item>
+        <item>RUB</item>
+        <item>SEK</item>
+        <item>SGD</item>
+        <item>THB</item>
+        <item>TRY</item>
+        <item>USD</item>
+        <item>ZAR</item>
     </string-array>
 
     <!-- Example settings for Data & Sync -->
@@ -40,6 +94,8 @@
         <item>1 hour</item>
         <item>3 hours</item>
         <item>6 hours</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
         <item>Never</item>
     </string-array>
     <string-array name="pref_sync_frequency_values">
@@ -48,6 +104,8 @@
         <item>60</item>
         <item>180</item>
         <item>360</item>
+        <item>720</item>
+        <item>1440</item>
         <item>-1</item>
     </string-array>
 

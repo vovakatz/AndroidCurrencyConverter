@@ -33,7 +33,7 @@ public class SharedPreferencesUtils
         editor.commit();
     }
 
-    public static ArrayList<ExchangeRate> getHistoricalExchangeRates()
+    public static List<ExchangeRate> getHistoricalExchangeRates()
     {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(AppContext.getContext());
         String json = sharedPreferences.getString(Constants.HISTORICAL_EXCHANGE_RATES, "");
@@ -42,7 +42,7 @@ public class SharedPreferencesUtils
         return exchangeRates == null ? new ArrayList<ExchangeRate>() : exchangeRates;
     }
 
-    public static void setHistoricalExchangeRates(ArrayList<ExchangeRate> exchageRates)
+    public static void setHistoricalExchangeRates(List<ExchangeRate> exchageRates)
     {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(AppContext.getContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();

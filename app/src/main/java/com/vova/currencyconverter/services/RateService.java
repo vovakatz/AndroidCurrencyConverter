@@ -1,24 +1,18 @@
 package com.vova.currencyconverter.services;
 
-import android.content.Context;
 import android.util.Log;
-
-import com.vova.currencyconverter.AppContext;
+import com.vova.currencyconverter.Constants;
 import com.vova.currencyconverter.models.ExchangeRate;
 import com.vova.currencyconverter.models.HistoricalRateEvent;
 import com.vova.currencyconverter.models.RateEvent;
 import com.vova.currencyconverter.utils.SharedPreferencesUtils;
-
 import org.greenrobot.eventbus.EventBus;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 
 import retrofit2.Callback;
 import retrofit2.GsonConverterFactory;
@@ -27,15 +21,12 @@ import retrofit2.Retrofit;
 
 public class RateService implements IRateService
 {
-    private final String BASE_URL = "http://api.fixer.io";
-    private final String DEFAULT_CURRENCY = "USD";
-
     private static IRateApi service;
 
     @Override
     public void populateRates(final Boolean triggerEvent)
     {
-        getService().getRates(DEFAULT_CURRENCY).enqueue(new Callback<ExchangeRate>()
+        getService().getRates(Constants.DEFAULT_BASE_CURRENCY).enqueue(new Callback<ExchangeRate>()
         {
             @Override
             public void onResponse(Response<ExchangeRate> response)
@@ -43,7 +34,7 @@ public class RateService implements IRateService
                 if (response.isSuccess())
                 {
                     ExchangeRate rates = response.body();
-                    rates.getRates().put(DEFAULT_CURRENCY, new BigDecimal("1"));
+                    rates.getRates().put(Constants.DEFAULT_BASE_CURRENCY, new BigDecimal("1"));
                     SharedPreferencesUtils.setExchangeRates(rates);
 
                     if (triggerEvent)
@@ -78,9 +69,12 @@ public class RateService implements IRateService
             {
                 if (response.isSuccess())
                 {
-                    ArrayList<ExchangeRate> historicalRates = SharedPreferencesUtils.getHistoricalExchangeRates();
-                    historicalRates.add(response.body());
-                    SharedPreferencesUtils.setHistoricalExchangeRates(historicalRates);
+                    synchronized(this)
+                    {
+                        List<ExchangeRate> historicalRates = SharedPreferencesUtils.getHistoricalExchangeRates();
+                        historicalRates.add(response.body());
+                        SharedPreferencesUtils.setHistoricalExchangeRates(historicalRates);
+                    }
                     EventBus.getDefault().post(new HistoricalRateEvent(true, baseCurrency, targetCurrency));
                     Log.i("HISTORIC RATES", "Service executed successfully for " + sdf.format(date));
                 }
@@ -123,7 +117,7 @@ public class RateService implements IRateService
         {
             Retrofit retrofit = new Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl(BASE_URL)
+                    .baseUrl(Constants.CURRENCY_URL)
                     .build();
             service = retrofit.create(IRateApi.class);
             return service;

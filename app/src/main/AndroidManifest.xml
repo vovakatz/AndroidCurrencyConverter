@@ -23,6 +23,7 @@
         </activity>
         <activity
             android:name=".activities.setting.SettingsActivity"
+            android:parentActivityName=".activities.main.MainActivity"
             android:label="@string/title_activity_settings">
         </activity>
 
