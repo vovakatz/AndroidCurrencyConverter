@@ -38,7 +38,9 @@ public class SharedPreferencesUtils
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(AppContext.getContext());
         String json = sharedPreferences.getString(Constants.HISTORICAL_EXCHANGE_RATES, "");
         Gson gson = new Gson();
-        ArrayList<ExchangeRate> exchangeRates = gson.fromJson(json, new TypeToken<List<ExchangeRate>>(){}.getType());
+        ArrayList<ExchangeRate> exchangeRates = gson.fromJson(json, new TypeToken<List<ExchangeRate>>()
+        {
+        }.getType());
         return exchangeRates == null ? new ArrayList<ExchangeRate>() : exchangeRates;
     }
 
@@ -47,8 +49,29 @@ public class SharedPreferencesUtils
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(AppContext.getContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
-        String json = gson.toJson(exchageRates, new TypeToken<List<ExchangeRate>>(){}.getType());
+        String json = gson.toJson(exchageRates, new TypeToken<List<ExchangeRate>>()
+        {
+        }.getType());
         editor.putString(Constants.HISTORICAL_EXCHANGE_RATES, json);
         editor.commit();
+    }
+
+    public static int getSyncFrequency()
+    {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(AppContext.getContext());
+        String syncPreference = sharedPref.getString("sync_frequency", "0");
+        return Integer.parseInt(syncPreference);
+    }
+
+    public static String getDefaultBaseCurrency()
+    {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(AppContext.getContext());
+        return sharedPref.getString("default_base_currency", Constants.DEFAULT_BASE_CURRENCY);
+    }
+
+    public static String getDefaultTargetCurrency()
+    {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(AppContext.getContext());
+        return sharedPref.getString("default_target_currency", Constants.DEFAULT_TARGET_CURRENCY);
     }
 }

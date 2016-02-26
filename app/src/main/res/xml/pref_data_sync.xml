@@ -7,5 +7,4 @@
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="@string/pref_title_sync_frequency"/>
-
 </PreferenceScreen>

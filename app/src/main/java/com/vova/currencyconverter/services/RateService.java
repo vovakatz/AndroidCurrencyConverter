@@ -92,7 +92,6 @@ public class RateService implements IRateService
                 EventBus.getDefault().post(new HistoricalRateEvent(false, null, null));
                 String message = t.getMessage();
                 Log.e("Error occurred", message == null ? "Remote server call returned an error " + sdf.format(date) : message);
-                //// TODO: 2/19/16 Cancel the rest of the calls
             }
         });
     }

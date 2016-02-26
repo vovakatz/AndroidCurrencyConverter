@@ -2,11 +2,15 @@ package com.vova.currencyconverter;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.vova.currencyconverter.activities.setting.SettingsActivity;
 import com.vova.currencyconverter.models.ExchangeRate;
 import com.vova.currencyconverter.services.IRateService;
 import com.vova.currencyconverter.services.RateService;
+import com.vova.currencyconverter.utils.SharedPreferencesUtils;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -43,18 +47,21 @@ public class AppContext extends Application
 
     private void scheduleRatesUpdates()
     {
-        ScheduledExecutorService scheduler =
-                Executors.newSingleThreadScheduledExecutor();
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
-        scheduler.scheduleAtFixedRate
-                (new Runnable()
-                {
-                    public void run()
+        int syncFrequency = SharedPreferencesUtils.getSyncFrequency();
+        if (syncFrequency > 0)
+        {
+            scheduler.scheduleAtFixedRate
+                    (new Runnable()
                     {
-                        IRateService service = new RateService();
-                        service.populateRates(false);
-                        Log.i("RateService", "Update rates service has just been called!");
-                    }
-                }, 15, 15, TimeUnit.MINUTES);
+                        public void run()
+                        {
+                            IRateService service = new RateService();
+                            service.populateRates(false);
+                            Log.i("RateService", "Update rates service has just been called!");
+                        }
+                    }, syncFrequency, syncFrequency, TimeUnit.MINUTES);
+        }
     }
 }

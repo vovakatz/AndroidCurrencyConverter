@@ -33,7 +33,7 @@ public class MainPresenter implements IMainPresenter
     public void init()
     {
         EventBus.getDefault().register(this);
-        theView.bindSpinners(Constants.CURRENCY_CODES, Constants.DEFAULT_BASE_CURRENCY, Constants.DEFAULT_TARGET_CURRENCY);
+        theView.bindSpinners(Constants.CURRENCY_CODES, SharedPreferencesUtils.getDefaultBaseCurrency(), SharedPreferencesUtils.getDefaultTargetCurrency());
     }
 
     public void convert(String amount, String fromCurrency, String toCurrency)

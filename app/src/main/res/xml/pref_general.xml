@@ -4,7 +4,7 @@
         android:defaultValue="-1"
         android:entries="@array/currency_list_titles"
         android:entryValues="@array/currency_list_values"
-        android:key="default_base_currency_list"
+        android:key="default_base_currency"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="Default base currency"/>
@@ -13,7 +13,7 @@
         android:defaultValue="-1"
         android:entries="@array/currency_list_titles"
         android:entryValues="@array/currency_list_values"
-        android:key="default_target_currency_list"
+        android:key="default_target_currency"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="Default target currency"/>
