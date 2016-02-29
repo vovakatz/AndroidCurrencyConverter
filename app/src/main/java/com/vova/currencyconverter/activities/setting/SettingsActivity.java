@@ -87,7 +87,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             case android.R.id.home:
                 if (!isChildFlag)
                 {
-                    NavUtils.navigateUpFromSameTask(this);
+                    Intent intent = NavUtils.getParentActivityIntent(this);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    NavUtils.navigateUpTo(this, intent);
+                    //NavUtils.navigateUpFromSameTask(this);
                     return true;
                 }
                 else

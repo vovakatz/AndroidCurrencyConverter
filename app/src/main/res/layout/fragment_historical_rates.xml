@@ -2,6 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
+             android:id="@+id/fragment_layout"
              tools:context="com.vova.currencyconverter.fragments.HistoricalRates.HistoricalRatesFragment">
 
     <com.github.mikephil.charting.charts.LineChart

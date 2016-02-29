@@ -1,5 +1,6 @@
 package com.vova.currencyconverter.activities.main;
 
+import android.os.Bundle;
 
 import com.vova.currencyconverter.AppContext;
 import com.vova.currencyconverter.Constants;
@@ -55,11 +56,10 @@ public class MainPresenter implements IMainPresenter
     public void getHistoricalRates(String fromCurrency, String toCurrency)
     {
         DateTime date = DateTime.now();
-        AppContext.numberOfCallsInitiated = 0;
         SharedPreferencesUtils.setHistoricalExchangeRates(new ArrayList<ExchangeRate>());
+        AppContext.numberOfCallsInitiated = 12;
         for (int i = 0; i < 12; i++)
         {
-            AppContext.numberOfCallsInitiated++;
             service.populateHistoricalRates(date.toDate(), fromCurrency, toCurrency);
             date = date.minusMonths(1);
         }

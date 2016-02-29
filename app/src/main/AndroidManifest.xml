@@ -14,7 +14,8 @@
         <activity
             android:name=".activities.main.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:finishOnTaskLaunch="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -24,6 +25,7 @@
         <activity
             android:name=".activities.setting.SettingsActivity"
             android:parentActivityName=".activities.main.MainActivity"
+            android:theme="@style/AppTheme"
             android:label="@string/title_activity_settings">
         </activity>
 

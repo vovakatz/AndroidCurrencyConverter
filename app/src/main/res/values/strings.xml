@@ -5,9 +5,7 @@
     <string name="please_wait">Please wait while the application fetches the latest rates...</string>
     <string name="title_activity_settings">Settings</string>
 
-    <!-- Strings related to Settings -->
-
-    <!-- Example General settings -->
+    <!-- General settings -->
     <string name="pref_header_general">General</string>
 
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
@@ -84,7 +82,7 @@
         <item>ZAR</item>
     </string-array>
 
-    <!-- Example settings for Data & Sync -->
+    <!-- settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
@@ -114,5 +112,4 @@
     <string name="btnSwap_text"><![CDATA[<>]]></string>
     <string name="btnConvert_text">convert</string>
     <string name="action_refresh_rates">Refresh Rates</string>
-    <string name="action_quit">Quit</string>
 </resources>

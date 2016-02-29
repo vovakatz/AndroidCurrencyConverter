@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vova.currencyconverter.Constants;
 import com.vova.currencyconverter.R;
 import com.vova.currencyconverter.activities.base.BaseActivity;
 import com.vova.currencyconverter.services.RateService;
@@ -34,6 +35,7 @@ public class MainActivity extends BaseActivity implements IMainView
     @Bind(R.id.txtOverlayText) TextView txtOverlayText;
     @Bind(R.id.prgLoad) ProgressBar prgLoad;
     @Bind(R.id.btnRefresh) Button btnRefresh;
+    @Bind(R.id.btnConvert) Button btnConvert;
     @Bind(R.id.spnFromCurrency) Spinner spnFromCurrency;
     @Bind(R.id.spnToCurrency) Spinner spnToCurrency;
     @Bind(R.id.toolbar) Toolbar toolbar;
@@ -57,6 +59,7 @@ public class MainActivity extends BaseActivity implements IMainView
         switch(v.getId())
         {
             case R.id.btnConvert:
+                //btnConvert.setEnabled(false);
                 presenter.convert(txtAmount.getText().toString(), spnFromCurrency.getSelectedItem().toString(), spnToCurrency.getSelectedItem().toString());
                 break;
             case R.id.btnRefresh:

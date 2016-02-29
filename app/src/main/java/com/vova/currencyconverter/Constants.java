@@ -8,6 +8,8 @@ public class Constants
     public static final String RATES_PREFERENCES = "RATES_PREFERENCES";
     public static final String EXCHANGE_RATES = "EXCHANGE_RATES";
     public static final String HISTORICAL_EXCHANGE_RATES = "HISTORICAL_EXCHANGE_RATES";
+    public static final String BASE_CURRENCY_SELECTED_INDEX = "BASE_CURRENCY_SELECTED_INDEX";
+    public static final String TARGET_CURRENCY_SELECTED_INDEX = "TARGET_CURRENCY_SELECTED_INDEX";
 
     public static final String[] CURRENCY_CODES = {
             "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HRK",
