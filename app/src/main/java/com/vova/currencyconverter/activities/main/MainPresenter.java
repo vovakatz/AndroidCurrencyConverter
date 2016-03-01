@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.vova.currencyconverter.AppContext;
 import com.vova.currencyconverter.Constants;
 import com.vova.currencyconverter.models.ExchangeRate;
+import com.vova.currencyconverter.models.HistoricalRateEvent;
 import com.vova.currencyconverter.models.RateEvent;
 import com.vova.currencyconverter.services.IRateService;
 import com.vova.currencyconverter.utils.SharedPreferencesUtils;
@@ -18,6 +19,8 @@ import org.joda.time.format.DateTimeFormatter;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class MainPresenter implements IMainPresenter
 {
@@ -41,6 +44,7 @@ public class MainPresenter implements IMainPresenter
     {
         if (validateInput(amount, fromCurrency, toCurrency))
         {
+            theView.disableConvertButton();
             BigDecimal convertedAmount = service.convert(Integer.parseInt(amount), fromCurrency, toCurrency);
             DecimalFormat twoDForm = new DecimalFormat("#,###.00");
             theView.displayRates(String.format("%,d", Integer.parseInt(amount)) + fromCurrency + " = " + twoDForm.format(convertedAmount) + toCurrency);
@@ -87,6 +91,15 @@ public class MainPresenter implements IMainPresenter
             }
             else
                 theView.displayNoRatesError("There was an issue getting the rates.  Please try again.");
+        }
+    }
+
+    @Subscribe
+    public void onHistoricalRatePopulated(HistoricalRateEvent event)
+    {
+        if (AppContext.numberOfCallsInitiated <= 0)
+        {
+            theView.enableConvertButton();
         }
     }
 

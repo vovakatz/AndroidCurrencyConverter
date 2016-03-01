@@ -14,4 +14,6 @@ public interface IMainView
     void hideOverlay();
     void displayNoRatesError(String error);
     void setLastUpdatedTime(String message);
+    void enableConvertButton();
+    void disableConvertButton();
 }

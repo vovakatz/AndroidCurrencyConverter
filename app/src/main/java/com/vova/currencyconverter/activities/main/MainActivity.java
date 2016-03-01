@@ -59,7 +59,6 @@ public class MainActivity extends BaseActivity implements IMainView
         switch(v.getId())
         {
             case R.id.btnConvert:
-                //btnConvert.setEnabled(false);
                 presenter.convert(txtAmount.getText().toString(), spnFromCurrency.getSelectedItem().toString(), spnToCurrency.getSelectedItem().toString());
                 break;
             case R.id.btnRefresh:
@@ -129,5 +128,17 @@ public class MainActivity extends BaseActivity implements IMainView
     public void setLastUpdatedTime(String message)
     {
         txtLastUpdated.setText(message);
+    }
+
+    @Override
+    public void enableConvertButton()
+    {
+        btnConvert.setEnabled(true);
+    }
+
+    @Override
+    public void disableConvertButton()
+    {
+        btnConvert.setEnabled(false);
     }
 }

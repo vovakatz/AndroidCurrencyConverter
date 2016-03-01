@@ -23,20 +23,23 @@ public class HistoricalRatesPresenter implements IHistoricalRatesPresenter
     @Subscribe
     public void onHistoricalRatePopulated(HistoricalRateEvent event)
     {
-        if (event.success)
+        if (AppContext.numberOfCallsInitiated > 0)
         {
-            AppContext.numberOfCallsInitiated--;
-            if (AppContext.numberOfCallsInitiated == 0)
+            if (event.success)
             {
-                List<ExchangeRate> historicalRates = SharedPreferencesUtils.getHistoricalExchangeRates();
-                Collections.sort(historicalRates, byDate);
-                SharedPreferencesUtils.setHistoricalExchangeRates(historicalRates);
-                theView.drawGraph(event.baseCurrency, event.targetCurrency);
+                AppContext.numberOfCallsInitiated--;
+                if (AppContext.numberOfCallsInitiated == 0)
+                {
+                    List<ExchangeRate> historicalRates = SharedPreferencesUtils.getHistoricalExchangeRates();
+                    Collections.sort(historicalRates, byDate);
+                    SharedPreferencesUtils.setHistoricalExchangeRates(historicalRates);
+                    theView.drawGraph(event.baseCurrency, event.targetCurrency);
+                }
+            } else
+            {
+                AppContext.numberOfCallsInitiated = -1;
+                theView.displayError("There was an error getting historical rates.  Please try again.");
             }
-        }
-        else
-        {
-            theView.displayError("There was an error getting historical rates.  Please try again.");
         }
     }
 
